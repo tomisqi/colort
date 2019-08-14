@@ -1,16 +1,17 @@
 #!/bin/bash
-# Run like this:
+# Run like this: cat file.txt | ./color.sh WORD1 WORD2 WORD3 ...
+# Each WORD receives a different color in the log
 
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+NC='\\e[0m' # No Color
 
-sedcmd=""
-for i; do
-    sedcmd+="-e s/$i/$RED""$i""$NC/ "
-done
-printf "sedcmd=%s\n" "$sedcmd"
-
-cat /dev/stdin | sed ''$sedcmd''
-
-#printf "I ${RED}love${NC} Stack Overflow\n"
-
+while read line
+do
+    sedcmd=""
+    idx=31 # RED
+    for i; do
+	color='\\e['$idx'm'
+	sedcmd+="-e s/$i/$color$i$NC/g "
+	(( idx++ ))
+    done
+    echo -e `echo $line | sed $sedcmd`
+done <&0 #read from stdin
