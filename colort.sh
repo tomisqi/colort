@@ -3,10 +3,8 @@
 # Each WORD receives a different color in the log
 
 # TODO
-# [ ] Using echo -e removes tabs
 # [ ] Option to have more than one string per color
-# [ ] Handle no arguments passed
-# [ ] Faster?
+# [ ] Tabs are removed
 
 NC='\\e[0m' # No Color
 
@@ -19,8 +17,13 @@ for i; do
     (( idx++ ))
 done
 
+# If no arguments, cat the stdin and exit
+if [[ "$sedcmd" == "" ]]; then
+    cat <&0
+    exit 0
+fi
+
 # Replace each line in file
-while read line
-do
-    echo -e `echo $line | sed $sedcmd`
+while IFS= read -r line; do
+    printf "%b\n" `echo "$line" | sed $sedcmd`
 done <&0 #read from stdin
