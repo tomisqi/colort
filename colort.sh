@@ -4,7 +4,6 @@
 
 # TODO
 # [ ] Option to have more than one string per color
-# [ ] Tabs are removed
 
 NC='\\e[0m' # No Color
 
@@ -25,5 +24,5 @@ fi
 
 # Replace each line in file
 while IFS= read -r line; do
-    printf "%b\n" `echo "$line" | sed $sedcmd`
+    printf "%b\n" "`echo "$line" | sed $sedcmd`"
 done <&0 #read from stdin
